@@ -1,5 +1,3 @@
-using System.Text.Json.Serialization;
-
 namespace UrlShortener.Contracts.Problems;
 
 public class ProblemResponse
