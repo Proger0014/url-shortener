@@ -14,7 +14,5 @@ public sealed class MongoDbStore
         IMongoDatabase mongoDatabase = mongoClient.GetDatabase(databaseName);
         
         Urls = mongoDatabase.GetCollection<Url>("Urls");
-
-        
     }
 }
