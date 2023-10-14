@@ -8,6 +8,8 @@ namespace UrlShortener.Routes.Urls;
 
 public static class CreateUrlRoute
 {
+    public const string Name = "CreateUrl";
+    
     public static async Task<IResult> CreateUrl(
         HttpContext httpContext,
         [FromServices] LinkGenerator linkGenerator,
@@ -28,7 +30,7 @@ public static class CreateUrlRoute
 
         string uri = linkGenerator.GetUriByName(
             httpContext: httpContext,
-            endpointName: Routes.Urls._Definition.CreateUrl)!;
+            endpointName: Name)!;
         
         return Results.Created(uri, response);
     }
