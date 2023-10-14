@@ -30,7 +30,7 @@ public class UrlRepository : IUrlRepository
 
     public async Task<string?> InsertUrl(UrlModel newUrl)
     {
-        Url? existsUrl = await _mongoDbStore.Urls.FindSync(u => u.ShortUrl == newUrl.ShortUrl)
+        Url? existsUrl = await (await _mongoDbStore.Urls.FindAsync(u => u.ShortUrl == newUrl.ShortUrl))
             .FirstOrDefaultAsync();
 
         if (existsUrl is not null) return null;
@@ -42,8 +42,10 @@ public class UrlRepository : IUrlRepository
         return newUrlForStore.Id;
     }
 
-    public Task<string?> RemoveUrl(UrlModel removeUrl)
+    public async Task<string?> RemoveUrl(UrlModel removeUrl)
     {
-        throw new NotImplementedException();
+        Url? deletedUrl = await _mongoDbStore.Urls.FindOneAndDeleteAsync(u => u.Id == removeUrl.Id);
+
+        return deletedUrl?.Id ?? null;
     }
 }

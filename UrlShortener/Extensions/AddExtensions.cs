@@ -1,6 +1,10 @@
 using System.Reflection;
 using Mapster;
 using MapsterMapper;
+using UrlShortener.Abstraction.Repositories;
+using UrlShortener.Abstraction.Services;
+using UrlShortener.Repositories;
+using UrlShortener.Services;
 
 namespace UrlShortener.Extensions;
 
@@ -18,5 +22,11 @@ public static class AddExtensions
 
         serviceCollection.AddSingleton(config);
         serviceCollection.AddScoped<IMapper, ServiceMapper>();
+    }
+
+    public static void AddAbstractions(this IServiceCollection serviceCollection)
+    {
+        serviceCollection.AddScoped<IUrlRepository, UrlRepository>();
+        serviceCollection.AddScoped<IUrlService, UrlService>();
     }
 }

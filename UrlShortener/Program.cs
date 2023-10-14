@@ -18,6 +18,8 @@ builder.Services.AddMongoDbStore(
     builder.Configuration.GetMongoDbHostString()!,
     builder.Configuration.GetMongoDbDatabaseString()!);
 
+builder.Services.AddAbstractions();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -1,3 +1,4 @@
+using UrlShortener.Routes.Error;
 using UrlShortener.Routes.Urls;
 
 namespace UrlShortener.Routes;

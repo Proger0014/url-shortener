@@ -1,13 +1,25 @@
+using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
+using UrlShortener.Abstraction.Services;
+using UrlShortener.Contracts;
+using UrlShortener.Entities;
 
 namespace UrlShortener.Routes.Urls;
 
 public static class GetUrlRoute
 {
-    public static IResult GetUrl(
+    public static async Task<IResult> GetUrl(
         HttpContext httpContext,
-        [FromRoute] Guid id)
+        [FromServices] IMapper mapper,
+        [FromServices] IUrlService urlService,
+        [FromRoute] string shortUrl)
     {
-        return Results.Ok(new { Id = id });
+        UrlModel? targetUrl = await urlService.GetUrl(shortUrl);
+
+        if (targetUrl is null) return Results.NotFound();
+
+        GetUrlResponse response = mapper.Map<GetUrlResponse>(targetUrl);
+
+        return Results.Ok(response);
     }
 }
