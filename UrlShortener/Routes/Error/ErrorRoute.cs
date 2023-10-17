@@ -1,7 +1,7 @@
 using System.Diagnostics;
 using System.Net;
 using System.Net.Mime;
-using UrlShortener.Contracts.Problems;
+using UrlShortener.Contracts;
 
 namespace UrlShortener.Routes.Error;
 

@@ -28,13 +28,8 @@ public static class CreateUrlRoute
         }
         
         UrlModel newUrl = mapper.Map<UrlModel>(createUrlRequest);
-        
-        string? insertedId = await urlService.InsertUrl(newUrl);
 
-        if (insertedId is null)
-        {
-            return Results.BadRequest();
-        }
+        await urlService.InsertUrl(newUrl);
         
         CreateUrlResponse response = mapper.Map<CreateUrlResponse>(newUrl);
 

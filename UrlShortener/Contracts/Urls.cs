@@ -1,4 +1,5 @@
 using FluentValidation;
+using UrlShortener.Abstraction.Services;
 using UrlShortener.Entities;
 
 namespace UrlShortener.Contracts;
@@ -12,18 +13,20 @@ public record GetUrlResponse(string ShortUrl, string TargetUri);
 
 public class CreateUrlRequestValidator : AbstractValidator<CreateUrlRequest>
 {
-    public CreateUrlRequestValidator()
+    public CreateUrlRequestValidator(IUrlService urlService)
     {
         When(c => c.ShortUrl is not null, () =>
         {
             RuleFor(c => c.ShortUrl)
                 .MinimumLength(UrlModel.ShortUrlMinLength)
-                .WithMessage("{PropertyName} должен иметь не меньше {MinLength} символов");
+                .WithMessage("{PropertyValue} должен иметь не меньше {MinLength} символов")
+                .Must(su => urlService.GetUrl(su).GetAwaiter().GetResult() is null)
+                .WithMessage("{PropertyValue} занят, воспользуйтесь другой ссылкой");
         });
 
         RuleFor(c => c.TargetUri)
             .Matches(UrlModel.TargetUriRegexPattern)
-            .WithMessage("{PropertyName} не является абсолютной ссылкой на ресурс");
+            .WithMessage("{PropertyValue} не является абсолютной ссылкой на ресурс");
     }
 }
 

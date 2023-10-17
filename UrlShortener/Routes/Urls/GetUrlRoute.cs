@@ -8,6 +8,8 @@ namespace UrlShortener.Routes.Urls;
 
 public static class GetUrlRoute
 {
+    public const string Name = "GetUrl";
+    
     public static async Task<IResult> GetUrl(
         HttpContext httpContext,
         [FromServices] IMapper mapper,

@@ -7,10 +7,12 @@ public static class GroupsDefinition
 {
     public static void MapMinimalApi(this IEndpointRouteBuilder routeBuilder)
     {
-        RouteGroupBuilder global = routeBuilder.MapGroup("/api");
+        RouteGroupBuilder global = routeBuilder.MapGroup("/api").WithOpenApi();
 
         global.MapError();
 
-        global.MapGroup("/urls").MapUrls();
+        global.MapGroup("/urls")
+            .WithTags(Urls._Definition.GroupName)
+            .MapUrls();
     }
 }
