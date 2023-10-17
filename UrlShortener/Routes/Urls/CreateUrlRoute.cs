@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.Results;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Abstraction.Services;
@@ -12,11 +14,19 @@ public static class CreateUrlRoute
     
     public static async Task<IResult> CreateUrl(
         HttpContext httpContext,
+        [FromServices] IValidator<CreateUrlRequest> validator,
         [FromServices] LinkGenerator linkGenerator,
         [FromServices] IMapper mapper,
         [FromServices] IUrlService urlService,
         [FromBody] CreateUrlRequest createUrlRequest)
     {
+        ValidationResult validationResult = await validator.ValidateAsync(createUrlRequest);
+
+        if (!validationResult.IsValid)
+        {
+            return Results.ValidationProblem(validationResult.ToDictionary());
+        }
+        
         UrlModel newUrl = mapper.Map<UrlModel>(createUrlRequest);
         
         string? insertedId = await urlService.InsertUrl(newUrl);
