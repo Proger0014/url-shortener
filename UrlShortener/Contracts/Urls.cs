@@ -1,4 +1,6 @@
+using System.Text.Json.Serialization;
 using FluentValidation;
+using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Abstraction.Services;
 using UrlShortener.Entities;
 
@@ -36,8 +38,10 @@ public class GetUrlRequestValidator : AbstractValidator<GetUrlRequest>
     {
         RuleFor(g => g.ShortUrl)
             .NotEmpty()
-            .WithMessage("{PropertyName} обязателен и не должен иметь пустую строку")
+            .WithMessage("{PropertyValue} обязателен и не должен иметь пустую строку")
             .MinimumLength(UrlModel.ShortUrlMinLength)
-            .WithMessage("{PropertyName} должен иметь минимульную длину {MinLength}");
+            .WithMessage("{PropertyValue} должен иметь минимульную длину {MinLength}")
+            .Matches(UrlModel.ShortUrlRegexPattern)
+            .WithMessage("{PropertyValue} не должен содержать недопустимых символов");
     }
 }

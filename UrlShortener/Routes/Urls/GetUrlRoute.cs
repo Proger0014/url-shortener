@@ -1,3 +1,5 @@
+using FluentValidation;
+using FluentValidation.Results;
 using MapsterMapper;
 using Microsoft.AspNetCore.Mvc;
 using UrlShortener.Abstraction.Services;
@@ -14,8 +16,16 @@ public static class GetUrlRoute
         HttpContext httpContext,
         [FromServices] IMapper mapper,
         [FromServices] IUrlService urlService,
-        [FromRoute] string shortUrl)
+        [FromServices] IValidator<GetUrlRequest> validator,
+        string shortUrl)
     {
+        ValidationResult validationResult = await validator.ValidateAsync(new GetUrlRequest(shortUrl));
+
+        if (!validationResult.IsValid)
+        {
+            return Results.ValidationProblem(validationResult.ToDictionary());
+        }
+        
         UrlModel? targetUrl = await urlService.GetUrl(shortUrl);
 
         if (targetUrl is null) return Results.NotFound();
