@@ -20,6 +20,8 @@ builder.Services.AddMongoDbStore(
 
 builder.Services.AddAbstractions();
 
+builder.Services.AddDefaultCors(builder.Configuration);
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -39,6 +41,8 @@ app.UseStatusCodePagesWithReExecute("/api/error");
 app.UseHttpsRedirection();
 
 app.UseRouting();
+
+app.UseCors();
 
 app.MapMinimalApi();
 

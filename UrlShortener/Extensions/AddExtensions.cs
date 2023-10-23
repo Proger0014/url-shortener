@@ -29,4 +29,17 @@ public static class AddExtensions
         serviceCollection.AddScoped<IUrlRepository, UrlRepository>();
         serviceCollection.AddScoped<IUrlService, UrlService>();
     }
+
+    public static void AddDefaultCors(this IServiceCollection serviceCollection, IConfiguration configuration)
+    {
+        string[] origins = configuration.GetSection("Origins")
+            .Get<string[]>()!;
+        
+        serviceCollection.AddCors(options =>
+            options.AddDefaultPolicy(policy =>
+                policy.WithOrigins(origins)
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()));
+    }
 }
