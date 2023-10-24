@@ -1,5 +1,5 @@
 export interface CreateUrlRequest {
-  shortUrl: string | null;
+  shortUrl?: string;
   targetUri: string;
 }
 

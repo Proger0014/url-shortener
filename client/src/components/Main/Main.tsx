@@ -1,11 +1,26 @@
 import { Container, Col, Row } from "react-bootstrap";
 import MainForm from "./MainForm";
+import LinkList, { Action, shortsReducer } from "./LinkList";
+import { useReducer, useState } from "react";
+import NotificationToast, { NotificationToastProps } from "./NotificationToast";
 
 export default function Main() {
+  const [shorts, shortsDispatcher] = useReducer(shortsReducer, { urls: [ ] });
+  const [notifyState, setNotifyMessages] = useState<NotificationToastProps>();
+
+  function notifyInfo({ variant, messages }: NotificationToastProps) {
+    setNotifyMessages({ variant, messages });
+  }
+
+  function shortDispatch(action: Action) {
+    shortsDispatcher(action);
+  }
+
   return (
     <>
-      <div className="bg-dark-subtle" style={{ paddingTop: 'calc(56px + 15px)', height: '40vh' }}>
-        <Container fluid="sm">
+      <div className="bg-dark-subtle" style={{ paddingTop: 'calc(56px + 15px)', paddingBottom: "55px" }}>
+        <Container fluid="sm" className="position-relative">
+            {notifyState && <NotificationToast variant={notifyState!.variant} messages={notifyState!.messages} />}
             <div className="text-center">
               <h2 className="mb-4">Бесплатный сокращатель ссылок</h2>
               <Row className="justify-content-center">
@@ -14,10 +29,10 @@ export default function Main() {
                 </Col>
               </Row>
             </div>
-            <MainForm />
+            <MainForm shortsDispatcher={shortDispatch} notifyHandler={notifyInfo} shortsState={shorts} />
+            <LinkList state={shorts} notifyHandler={notifyInfo} shortDispatcher={shortDispatch} />
         </Container>
       </div>
-      <div style={{ height: '100.2vh' }}></div>
     </>
   );
 }

@@ -6,8 +6,8 @@ export const errorResponseOverrideAxiosMiddleware: Middleware = (useSWRNext: SWR
   const res = useSWRNext(key, fetcher, config);
 
   const error: ProblemResponse = (res?.error as AxiosError<ProblemResponse>)?.status === 400
-    ? res?.error?.response.data as ProblemValidationResponse
-    : res?.error?.response.data as ProblemDefaultResponse;
+    ? res?.error?.response?.data as ProblemValidationResponse
+    : res?.error?.response?.data as ProblemDefaultResponse;
 
   return {
     ...res,

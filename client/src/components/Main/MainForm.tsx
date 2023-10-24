@@ -1,22 +1,49 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { Form, Button, Row, Col, InputGroup } from "react-bootstrap";
 import { useState } from "react";
+import { Action, State } from "./LinkList";
+import { UrlsApi } from "../../api/UrlsApi";
+import { ProblemResponse } from "../../contracts/Errors";
+import { AxiosError } from "axios";
+import UrlsUtils from "../../utils/UrlsUtils";
+import { NotificationToastProps } from "./NotificationToast";
+
+export interface MainFormProps {
+  shortsDispatcher: (action: Action) => void;
+  notifyHandler: ({ variant, messages }: NotificationToastProps ) => void;
+  shortsState: State;
+}
 
 export interface MainFormValues {
   shortUrl?: string;
   targetUri: string;
 }
 
-const onSubmit: SubmitHandler<MainFormValues> = (data) => {
-  alert(JSON.stringify(data));
-}
-
-export default function MainForm() {
+export default function MainForm({ shortsDispatcher, notifyHandler, shortsState }: MainFormProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
+  
+  const onSubmit: SubmitHandler<MainFormValues> = (input) => {
+    if (shortsState.urls.filter(u => u.targetUri == input.targetUri).length > 0) {
+      notifyHandler({ variant: "danger", messages: ["Ссылка уже существует"] });
+      return;
+    }
+
+    const data = UrlsApi.createUrl(input);
+
+    data
+      .then(res => {
+        shortsDispatcher({ type: "add", url: { shortLink: `${UrlsUtils.getBaseUri()}/r/${res.shortUrl}`, ...res } });
+      })
+      .catch((err: AxiosError<ProblemResponse>) => {
+        if (err.response?.status == null) {
+          notifyHandler({ variant: "danger", messages: ["Неизвестная ошибка"] });
+        }
+      });
+  }
 
   const { control, handleSubmit, resetField } = useForm<MainFormValues>({
     defaultValues: {
-      shortUrl: "",
+      shortUrl: undefined,
       targetUri: ""
     }
   });
@@ -65,6 +92,7 @@ export default function MainForm() {
             <Form.Group as={Col} md={9} lg={8} sm={12} xs={12} className="mt-md-4 mb-sm-4 mb-4 mb-md-0 order-2 order-md-3">
               <Form.Control
                 {...field}
+                defaultValue=""
                 isInvalid={fieldState.invalid} 
                 type="text" 
                 className="py-2 fs-5 col-sm-12" 
