@@ -1,16 +1,16 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import { Form, Button, Row, Col, InputGroup } from "react-bootstrap";
 import { useState } from "react";
-import { Action, State } from "./LinkList";
+import { Action as ShortsAction, State } from "./LinkList";
 import { UrlsApi } from "../../api/UrlsApi";
 import { ProblemResponse } from "../../contracts/Errors";
 import { AxiosError } from "axios";
 import UrlsUtils from "../../utils/UrlsUtils";
-import { NotificationToastProps } from "./NotificationToast";
+import { NotificationToastActionItem } from "./NotificationToast";
 
 export interface MainFormProps {
-  shortsDispatcher: (action: Action) => void;
-  notifyHandler: ({ variant, messages }: NotificationToastProps ) => void;
+  shortsDispatcher: (action: ShortsAction) => void;
+  notifyHandler: ({ variant, messages }: NotificationToastActionItem ) => void;
   shortsState: State;
 }
 

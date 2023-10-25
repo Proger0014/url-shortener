@@ -1,7 +1,7 @@
 import { Reducer } from "react";
 import LinkItem from "./LinkItem";
 import { Row } from "react-bootstrap";
-import { NotificationToastProps } from "./NotificationToast";
+import { NotificationToastActionItem } from "./NotificationToast";
 
 export type Url = {
   targetUri: string;
@@ -17,7 +17,7 @@ export interface Action {
   url: Url;
 }
 
-export const shortsReducer: Reducer<State, Action> = (state: State, action: Action): State => {
+export const reducer: Reducer<State, Action> = (state: State, action: Action): State => {
   const newState = { ...state };
 
   switch(action.type) {
@@ -44,7 +44,7 @@ export const shortsReducer: Reducer<State, Action> = (state: State, action: Acti
 
 export interface LinkListProps {
   state: State;
-  notifyHandler: (notifyHandlerProps: NotificationToastProps) => void;
+  notifyHandler: (notifyHandlerProps: NotificationToastActionItem) => void;
   shortDispatcher: (action: Action) => void;
 }
 

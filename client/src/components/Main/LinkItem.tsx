@@ -3,11 +3,11 @@ import { Action, Url } from "./LinkList";
 import { Button, Col } from "react-bootstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./LinkItem.css";
-import { NotificationToastProps } from "./NotificationToast";
+import { NotificationToastActionItem } from "./NotificationToast";
 
 export interface LinkItemProps {
   url: Url;
-  notifyHandler: ({ variant, messages }: NotificationToastProps) => void;
+  notifyHandler: ({ variant, messages }: NotificationToastActionItem) => void;
   shortDispatcher: (action: Action) => void;
 }
 
@@ -18,7 +18,7 @@ export default function LinkItem({ url, notifyHandler, shortDispatcher }: LinkIt
 
   function handleHide() {
     shortDispatcher({ type: "rem", url: url });
-    notifyHandler({ variant: "success", messages: ["ссылка успешно удалена"] });
+    notifyHandler({ variant: "success", messages: ["ссылка успешно убрана"] });
   }
 
   return (

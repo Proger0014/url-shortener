@@ -1,18 +1,23 @@
 import { Container, Col, Row } from "react-bootstrap";
 import MainForm from "./MainForm";
-import LinkList, { Action, shortsReducer } from "./LinkList";
-import { useReducer, useState } from "react";
-import NotificationToast, { NotificationToastProps } from "./NotificationToast";
+import LinkList, { Action as ShortsAction, reducer as shortsReducer } from "./LinkList";
+import { useReducer} from "react";
+import { NotificationToastActionItem, reducer as notifyRedcuer } from "./NotificationToast";
+import NotificationRoot from "./NotificationRoot";
 
 export default function Main() {
   const [shorts, shortsDispatcher] = useReducer(shortsReducer, { urls: [ ] });
-  const [notifyState, setNotifyMessages] = useState<NotificationToastProps>();
+  const [notifyState, notifyDispatcher] = useReducer(notifyRedcuer, { notifications: [] });
 
-  function notifyInfo({ variant, messages }: NotificationToastProps) {
-    setNotifyMessages({ variant, messages });
+  function notifyDispatch(notificationToastActionItem: NotificationToastActionItem) {
+    notifyDispatcher({ type: "notify", notification: notificationToastActionItem });
   }
 
-  function shortDispatch(action: Action) {
+  function removeNotifyDispatcher(id: number) {
+    notifyDispatcher({ type: "rem", notification: id });
+  }
+
+  function shortDispatch(action: ShortsAction) {
     shortsDispatcher(action);
   }
 
@@ -20,7 +25,7 @@ export default function Main() {
     <>
       <div className="bg-dark-subtle" style={{ paddingTop: 'calc(56px + 15px)', paddingBottom: "55px" }}>
         <Container fluid="sm" className="position-relative">
-            {notifyState && <NotificationToast variant={notifyState!.variant} messages={notifyState!.messages} />}
+            {notifyState && <NotificationRoot notificationToastStateItems={notifyState.notifications} notifyClear={removeNotifyDispatcher} />}
             <div className="text-center">
               <h2 className="mb-4">Бесплатный сокращатель ссылок</h2>
               <Row className="justify-content-center">
@@ -29,8 +34,8 @@ export default function Main() {
                 </Col>
               </Row>
             </div>
-            <MainForm shortsDispatcher={shortDispatch} notifyHandler={notifyInfo} shortsState={shorts} />
-            <LinkList state={shorts} notifyHandler={notifyInfo} shortDispatcher={shortDispatch} />
+            <MainForm shortsDispatcher={shortDispatch} notifyHandler={notifyDispatch} shortsState={shorts} />
+            <LinkList state={shorts} notifyHandler={notifyDispatch} shortDispatcher={shortDispatch} />
         </Container>
       </div>
     </>
