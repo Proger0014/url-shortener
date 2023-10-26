@@ -4,6 +4,7 @@ import LinkList, { Action as ShortsAction, reducer as shortsReducer } from "./Li
 import { useReducer} from "react";
 import { NotificationToastActionItem, reducer as notifyRedcuer } from "./NotificationToast";
 import NotificationRoot from "./NotificationRoot";
+import BaseContainer from "../Base/BaseContainer";
 
 export default function Main() {
   const [shorts, shortsDispatcher] = useReducer(shortsReducer, { urls: [ ] });
@@ -22,8 +23,8 @@ export default function Main() {
   }
 
   return (
-    <>
-      <div className="bg-dark-subtle" style={{ paddingTop: 'calc(56px + 15px)', paddingBottom: "55px" }}>
+    <div className="bg-dark-subtle py-5">
+      <BaseContainer>
         <Container fluid="sm" className="position-relative">
             {notifyState && <NotificationRoot notificationToastStateItems={notifyState.notifications} notifyClear={removeNotifyDispatcher} />}
             <div className="text-center">
@@ -37,7 +38,7 @@ export default function Main() {
             <MainForm shortsDispatcher={shortDispatch} notifyHandler={notifyDispatch} shortsState={shorts} />
             <LinkList state={shorts} notifyHandler={notifyDispatch} shortDispatcher={shortDispatch} />
         </Container>
-      </div>
-    </>
+      </BaseContainer>
+    </div>
   );
 }

@@ -7,6 +7,7 @@ import UrlsUtils from "../../utils/UrlsUtils";
 import { UrlsApi } from "../../api/UrlsApi";
 import { GetUrlResponse } from "../../contracts/Urls";
 import { ProblemResponse} from "../../contracts/Errors";
+import BaseContainer from "../Base/BaseContainer";
 
 export default function Redirect() {
   const { shortUrl } = useParams();
@@ -20,16 +21,14 @@ export default function Redirect() {
   
   if (isCountdownFinish) {
     setTimeout(() => 
-      UrlsUtils.redirect(
-        UrlsUtils.fixUri(data?.targetUri ?? "") 
-        ?? ""), 1000);
+      UrlsUtils.redirect(UrlsUtils.fixUri(data?.targetUri ?? "") ?? "", true), 1000);
   }
 
   return (
-    <Container fluid="sm">
-      <div style={{ paddingTop: "calc(56px + 15px)" }}>
+    <BaseContainer>
+      <Container fluid="sm">
         <RedirectAlert targetUri={data?.targetUri ?? ""} finishCountdown={finishCountdown} />
-      </div>
-    </Container>
+      </Container>
+    </BaseContainer>
   )
 }

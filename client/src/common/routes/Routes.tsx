@@ -9,12 +9,14 @@ export default function Routes() {
   return (
     <BrowserRouter basename="/">
       <Header />
-      <RouteList>
-        <Route path="" element={<Main />} />
-        <Route path="*" element={<NotFound />} />
-        <Route path="r/:shortUrl" element={<Redirect />} />
-      </RouteList>
-      <Footer />
+      <div className="h-100 d-flex flex-column justify-content-between">
+        <RouteList>
+          <Route path="" element={<Main />} />
+          <Route path="*" element={<NotFound />} />
+          <Route path="r/:shortUrl" element={<Redirect />} />
+        </RouteList>
+        <Footer />
+      </div>
     </BrowserRouter>
   );
 }
