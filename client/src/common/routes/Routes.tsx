@@ -3,6 +3,7 @@ import NotFound from "../../components/Error/NotFound";
 import Header from "../../components/Base/Header";
 import Main from "../../components/Main/Main";
 import Footer from "../../components/Base/Footer";
+import Redirect from "../../components/Redirect/Redirect";
 
 export default function Routes() {
   return (
@@ -11,7 +12,7 @@ export default function Routes() {
       <RouteList>
         <Route path="" element={<Main />} />
         <Route path="*" element={<NotFound />} />
-        {/* <Route path="r/:shortUrl" /> */}
+        <Route path="r/:shortUrl" element={<Redirect />} />
       </RouteList>
       <Footer />
     </BrowserRouter>

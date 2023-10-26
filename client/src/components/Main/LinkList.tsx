@@ -5,7 +5,7 @@ import { NotificationToastActionItem } from "./NotificationToast";
 
 export type Url = {
   targetUri: string;
-  shortLink: string;
+  shortUrl: string;
 }
 
 export interface State {

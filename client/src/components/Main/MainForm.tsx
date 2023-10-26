@@ -1,12 +1,11 @@
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
-import { Form, Button, Row, Col, InputGroup } from "react-bootstrap";
 import { useState } from "react";
 import { Action as ShortsAction, State } from "./LinkList";
 import { UrlsApi } from "../../api/UrlsApi";
 import { ProblemResponse } from "../../contracts/Errors";
 import { AxiosError } from "axios";
-import UrlsUtils from "../../utils/UrlsUtils";
 import { NotificationToastActionItem } from "./NotificationToast";
+import { Form, Row, Col, InputGroup, Button } from "react-bootstrap";
 
 export interface MainFormProps {
   shortsDispatcher: (action: ShortsAction) => void;
@@ -32,7 +31,7 @@ export default function MainForm({ shortsDispatcher, notifyHandler, shortsState 
 
     data
       .then(res => {
-        shortsDispatcher({ type: "add", url: { shortLink: `${UrlsUtils.getBaseUri()}/r/${res.shortUrl}`, ...res } });
+        shortsDispatcher({ type: "add", url: { ...res } });
       })
       .catch((err: AxiosError<ProblemResponse>) => {
         if (err.response?.status == null) {

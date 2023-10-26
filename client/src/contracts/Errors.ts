@@ -10,7 +10,7 @@ export interface ProblemValidationResponse {
   type: string;
   title: string;
   status: number;
-  errors: [string: string][];
+  errors: { [key: string]: string[] };
 }
 
 export type ProblemResponse = ProblemDefaultResponse | ProblemValidationResponse;

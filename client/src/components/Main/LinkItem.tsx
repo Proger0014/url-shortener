@@ -4,6 +4,7 @@ import { Button, Col } from "react-bootstrap";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./LinkItem.css";
 import { NotificationToastActionItem } from "./NotificationToast";
+import UrlsUtils from "../../utils/UrlsUtils";
 
 export interface LinkItemProps {
   url: Url;
@@ -21,6 +22,8 @@ export default function LinkItem({ url, notifyHandler, shortDispatcher }: LinkIt
     notifyHandler({ variant: "success", messages: ["ссылка успешно убрана"] });
   }
 
+  const shortLink = `${UrlsUtils.getBaseUri()}/r/${url.shortUrl}`;
+
   return (
     <Col md={9} lg={8} className="mb-3 px-3">
       <div>
@@ -28,12 +31,12 @@ export default function LinkItem({ url, notifyHandler, shortDispatcher }: LinkIt
           <div className="w-100 d-flex justify-content-between align-items-center">
             <div className="overflow-hidden d-flex justify-content-between flex-xl-row flex-column me-2 me-xl-0">
               <span className="me-0 me-sm-3">{url.targetUri}</span>
-              <Link className="link-offset-2 me-2" to={url.shortLink}>
-                {url.shortLink}
+              <Link className="link-offset-2 me-2" to={shortLink}>
+                {shortLink}
               </Link>
             </div>
             <div className="buttons d-flex justify-content-xl-between justify-content-end flex-xl-row flex-column">
-              <CopyToClipboard text={url.shortLink} onCopy={handleCopy}>
+              <CopyToClipboard text={shortLink} onCopy={handleCopy}>
                 <Button variant="glass" className="py-1 me-xl-2">Copy</Button>
               </CopyToClipboard>
 
